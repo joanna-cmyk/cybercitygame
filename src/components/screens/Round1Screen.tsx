@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useGame } from '@/contexts/GameContext';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight, CheckCircle, XCircle, AlertTriangle, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, XCircle, AlertTriangle, ExternalLink } from 'lucide-react';
 import { websiteUrls, domainExtensions, redFlagPatterns, verificationTools, UrlItem } from '@/data/gameData';
 
 type SortCategory = 'unsorted' | 'real' | 'fake';
@@ -15,7 +15,6 @@ export function Round1Screen() {
   const [items, setItems] = useState<SortedItem[]>(
     () => shuffleArray(websiteUrls).map(item => ({ ...item, sortedTo: 'unsorted' as SortCategory }))
   );
-  const [showHints, setShowHints] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState<{ correct: number; total: number } | null>(null);
 
@@ -39,7 +38,7 @@ export function Round1Screen() {
       if (userAnswer === correctAnswer) correct++;
     });
     setResults({ correct, total: items.length });
-    updateScore('round1', correct * 2); // 2 points per correct answer, max 20
+    updateScore('round1', correct * 2);
     setSubmitted(true);
   };
 
@@ -49,74 +48,81 @@ export function Round1Screen() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="bg-card border-b border-border sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <Button variant="ghost" onClick={() => setCurrentScreen('tutorial')} className="flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" /> Back
           </Button>
-          <div className="text-center">
-            <h1 className="text-lg font-bold text-foreground">🌐 Round 1: Real vs Fake Websites</h1>
-            <p className="text-sm text-muted-foreground">Sort each URL into the correct category</p>
-          </div>
+          <h1 className="text-lg font-bold text-foreground">🌐 Round 1: Real vs Fake Websites</h1>
           <div className="badge-info text-sm font-semibold px-3 py-1">
             Score: {categorized.real.length + categorized.fake.length}/{items.length}
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-6">
-        {/* Hints Box */}
-        <div className="mb-6 bg-card rounded-xl border border-border overflow-hidden">
-          <button
-            onClick={() => setShowHints(!showHints)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
-          >
-            <span className="font-semibold text-foreground">🎯 Key Things to Remember</span>
-            {showHints ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
-          </button>
-          {showHints && (
-            <div className="p-4 pt-0 border-t border-border space-y-4">
-              <div>
-                <h4 className="font-semibold text-sm text-foreground mb-2">📍 Domain Extensions</h4>
-                <div className="flex flex-wrap gap-2">
-                  {domainExtensions.map(d => (
-                    <span key={d.ext} className="badge-info">{d.ext} - {d.desc}</span>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm text-foreground mb-2">🚩 Red Flags</h4>
-                <div className="flex flex-wrap gap-2">
-                  {redFlagPatterns.map(f => (
-                    <span key={f.title} className="badge-danger">{f.title}</span>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm text-foreground mb-2">🔧 Tools</h4>
-                <div className="flex flex-wrap gap-2">
-                  {verificationTools.websites.map(t => (
-                    <a key={t.name} href={t.url} target="_blank" rel="noopener noreferrer" className="badge-info hover:opacity-80">
-                      {t.name} <ExternalLink className="w-3 h-3 inline ml-1" />
-                    </a>
-                  ))}
-                </div>
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* Hints Box - Always Visible, Horizontal */}
+        <div className="hints-box mb-6">
+          <h3 className="font-bold text-foreground mb-4 text-lg">🎯 KEY THINGS TO REMEMBER</h3>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Domain Extensions */}
+            <div>
+              <h4 className="font-semibold text-foreground mb-2 text-sm">📍 Domain Extensions</h4>
+              <div className="space-y-1 text-sm">
+                {domainExtensions.map(d => (
+                  <div key={d.ext} className="flex gap-2">
+                    <span className="font-mono font-semibold text-primary">{d.ext}</span>
+                    <span className="text-muted-foreground">- {d.desc}</span>
+                  </div>
+                ))}
               </div>
             </div>
-          )}
+
+            {/* Red Flags */}
+            <div>
+              <h4 className="font-semibold text-foreground mb-2 text-sm">🚩 Red Flags to Watch</h4>
+              <div className="space-y-2 text-sm">
+                {redFlagPatterns.map((f, i) => (
+                  <div key={i}>
+                    <p className="font-medium text-foreground">{f.title}</p>
+                    <p className="text-muted-foreground text-xs">Example: {f.example}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Tools */}
+            <div>
+              <h4 className="font-semibold text-foreground mb-2 text-sm">🔧 Tools to Verify</h4>
+              <div className="space-y-2">
+                {verificationTools.websites.map(t => (
+                  <a 
+                    key={t.name} 
+                    href={t.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-2 text-sm text-info hover:underline"
+                  >
+                    <span className="font-mono">{t.name}</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Sorting Area */}
+        {/* Sorting Area - 3 Columns */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
           {/* Real Column */}
           <div className="drop-zone drop-zone-safe">
             <div className="flex items-center gap-2 mb-4">
-              <CheckCircle className="w-5 h-5 text-success" />
-              <h3 className="font-bold text-success">REAL</h3>
+              <CheckCircle className="w-6 h-6 text-success" />
+              <h3 className="font-bold text-success text-lg">REAL</h3>
               <span className="text-sm text-muted-foreground">({categorized.real.length} items)</span>
             </div>
-            <div className="space-y-2 min-h-[150px]">
+            <div className="space-y-2 flex-1">
               {categorized.real.map(item => (
                 <UrlCard key={item.id} item={item} onMove={moveItem} currentCategory="real" />
               ))}
@@ -126,11 +132,11 @@ export function Round1Screen() {
           {/* Unsorted Column */}
           <div className="drop-zone drop-zone-neutral">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-lg">📦</span>
-              <h3 className="font-bold text-foreground">UNSORTED</h3>
+              <span className="text-xl">📦</span>
+              <h3 className="font-bold text-foreground text-lg">URLS</h3>
               <span className="text-sm text-muted-foreground">({categorized.unsorted.length} items)</span>
             </div>
-            <div className="space-y-2 min-h-[150px]">
+            <div className="space-y-2 flex-1">
               {categorized.unsorted.map(item => (
                 <UrlCard key={item.id} item={item} onMove={moveItem} currentCategory="unsorted" />
               ))}
@@ -140,11 +146,11 @@ export function Round1Screen() {
           {/* Fake Column */}
           <div className="drop-zone drop-zone-danger">
             <div className="flex items-center gap-2 mb-4">
-              <XCircle className="w-5 h-5 text-destructive" />
-              <h3 className="font-bold text-destructive">FAKE</h3>
+              <XCircle className="w-6 h-6 text-destructive" />
+              <h3 className="font-bold text-destructive text-lg">FAKE</h3>
               <span className="text-sm text-muted-foreground">({categorized.fake.length} items)</span>
             </div>
-            <div className="space-y-2 min-h-[150px]">
+            <div className="space-y-2 flex-1">
               {categorized.fake.map(item => (
                 <UrlCard key={item.id} item={item} onMove={moveItem} currentCategory="fake" />
               ))}
@@ -243,8 +249,7 @@ function Round1Results({
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Score */}
-        <div className={`text-center p-8 rounded-2xl mb-8 ${isGreat ? 'bg-success/10 border-2 border-success' : 'bg-warning/10 border-2 border-warning'}`}>
+        <div className={`text-center p-8 rounded-2xl mb-8 ${isGreat ? 'bg-success/10 border-2 border-success' : 'bg-orange-100 border-2 border-orange-400'}`}>
           <div className="text-6xl mb-4">{isGreat ? '🎉' : '💪'}</div>
           <h2 className="text-3xl font-bold text-foreground mb-2">
             {results.correct}/{results.total} Correct!
@@ -252,7 +257,6 @@ function Round1Results({
           <p className="text-lg text-muted-foreground">{percentage}% accuracy</p>
         </div>
 
-        {/* Answers */}
         <div className="space-y-3 mb-8">
           <h3 className="font-bold text-foreground mb-4">Your Answers:</h3>
           {items.map(item => {
@@ -293,10 +297,9 @@ function Round1Results({
           })}
         </div>
 
-        {/* Key Lessons */}
         <div className="bg-card rounded-xl border border-border p-6 mb-8">
           <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-warning" />
+            <AlertTriangle className="w-5 h-5 text-orange-500" />
             Scammer Tricks You Just Learned:
           </h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
@@ -307,7 +310,6 @@ function Round1Results({
           </ul>
         </div>
 
-        {/* Continue */}
         <div className="flex justify-center">
           <Button onClick={onContinue} size="lg" className="font-semibold text-lg px-8">
             Next Round: Emails

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useGame } from '@/contexts/GameContext';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight, CheckCircle, XCircle, AlertTriangle, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, XCircle, AlertTriangle, ExternalLink } from 'lucide-react';
 import { emailAddresses, verificationTools, EmailItem } from '@/data/gameData';
 
 type SortCategory = 'unsorted' | 'real' | 'fake';
@@ -15,7 +15,6 @@ export function Round2Screen() {
   const [items, setItems] = useState<SortedItem[]>(
     () => shuffleArray(emailAddresses).map(item => ({ ...item, sortedTo: 'unsorted' as SortCategory }))
   );
-  const [showHints, setShowHints] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState<{ correct: number; total: number } | null>(null);
 
@@ -39,7 +38,7 @@ export function Round2Screen() {
       if (userAnswer === correctAnswer) correct++;
     });
     setResults({ correct, total: items.length });
-    updateScore('round2', correct * 2); // 2 points per correct answer, max 20
+    updateScore('round2', correct * 2);
     setSubmitted(true);
   };
 
@@ -49,76 +48,106 @@ export function Round2Screen() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="bg-card border-b border-border sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <Button variant="ghost" onClick={() => setCurrentScreen('round1')} className="flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" /> Back
           </Button>
-          <div className="text-center">
-            <h1 className="text-lg font-bold text-foreground">📧 Round 2: Real vs Fake Emails</h1>
-            <p className="text-sm text-muted-foreground">Sort each email address into the correct category</p>
-          </div>
+          <h1 className="text-lg font-bold text-foreground">📧 Round 2: Real vs Fake Emails</h1>
           <div className="badge-info text-sm font-semibold px-3 py-1">
             Score: {categorized.real.length + categorized.fake.length}/{items.length}
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-6">
-        {/* Hints Box */}
-        <div className="mb-6 bg-card rounded-xl border border-border overflow-hidden">
-          <button
-            onClick={() => setShowHints(!showHints)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
-          >
-            <span className="font-semibold text-foreground">🎯 Key Things to Remember</span>
-            {showHints ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
-          </button>
-          {showHints && (
-            <div className="p-4 pt-0 border-t border-border space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="p-3 bg-success/5 rounded-lg border border-success/20">
-                  <h4 className="font-semibold text-sm text-success mb-2">✅ Real Company Emails</h4>
-                  <ul className="text-xs text-foreground space-y-1">
-                    <li>• Use their own domain</li>
-                    <li>• Match their website domain exactly</li>
-                    <li>• Never use free providers</li>
-                  </ul>
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* Hints Box - Always Visible, Horizontal */}
+        <div className="hints-box mb-6">
+          <h3 className="font-bold text-foreground mb-4 text-lg">🎯 KEY THINGS TO REMEMBER</h3>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Real Company Emails */}
+            <div>
+              <h4 className="font-semibold text-success mb-2 text-sm">✅ Real Company Emails</h4>
+              <div className="space-y-2 text-sm">
+                <div>
+                  <p className="font-medium text-foreground">Use their own domain</p>
+                  <p className="text-muted-foreground text-xs">Example: customercare@pnb.co.in</p>
                 </div>
-                <div className="p-3 bg-destructive/5 rounded-lg border border-destructive/20">
-                  <h4 className="font-semibold text-sm text-destructive mb-2">❌ Fake Email Signs</h4>
-                  <ul className="text-xs text-foreground space-y-1">
-                    <li>• Use free email services (Gmail, Yahoo)</li>
-                    <li>• Have extra words/dots in domain</li>
-                    <li>• Mix different domains together</li>
-                  </ul>
+                <div>
+                  <p className="font-medium text-foreground">Match their website domain exactly</p>
+                  <p className="text-muted-foreground text-xs">If website is amazon.in, email should be @amazon.in</p>
                 </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm text-foreground mb-2">🔧 Tools</h4>
-                <div className="flex flex-wrap gap-2">
-                  {verificationTools.emails.map(t => (
-                    <a key={t.name} href={t.url} target="_blank" rel="noopener noreferrer" className="badge-info hover:opacity-80">
-                      {t.name} <ExternalLink className="w-3 h-3 inline ml-1" />
-                    </a>
-                  ))}
+                <div>
+                  <p className="font-medium text-foreground">Never use free providers</p>
+                  <p className="text-muted-foreground text-xs">Banks never use Gmail, Hotmail, or Yahoo</p>
                 </div>
               </div>
             </div>
-          )}
+
+            {/* Fake Email Signs */}
+            <div>
+              <h4 className="font-semibold text-destructive mb-2 text-sm">❌ Fake Email Signs</h4>
+              <div className="space-y-2 text-sm">
+                <div>
+                  <p className="font-medium text-foreground">Use free email services</p>
+                  <p className="text-muted-foreground text-xs">Example: customercare.pnb@gmail.com</p>
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">Have extra words/dots in domain</p>
+                  <p className="text-muted-foreground text-xs">Example: support@bank.login.com</p>
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">Mix different domains together</p>
+                  <p className="text-muted-foreground text-xs">Example: support@sbi.co.in.help.com</p>
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">Numbers replacing letters</p>
+                  <p className="text-muted-foreground text-xs">Example: amaz0n with number 0</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Tools */}
+            <div>
+              <h4 className="font-semibold text-foreground mb-2 text-sm">🔧 Tools to Verify</h4>
+              <div className="space-y-2">
+                {verificationTools.emails.map(t => (
+                  <a 
+                    key={t.name} 
+                    href={t.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-2 text-sm text-info hover:underline"
+                  >
+                    <span className="font-mono">{t.name}</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                ))}
+                <a 
+                  href="https://spotthescam.in" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex items-center gap-2 text-sm text-info hover:underline"
+                >
+                  <span className="font-mono">spotthescam.in</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Sorting Area */}
+        {/* Sorting Area - 3 Columns */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
           {/* Real Column */}
           <div className="drop-zone drop-zone-safe">
             <div className="flex items-center gap-2 mb-4">
-              <CheckCircle className="w-5 h-5 text-success" />
-              <h3 className="font-bold text-success">REAL</h3>
+              <CheckCircle className="w-6 h-6 text-success" />
+              <h3 className="font-bold text-success text-lg">REAL</h3>
               <span className="text-sm text-muted-foreground">({categorized.real.length} items)</span>
             </div>
-            <div className="space-y-2 min-h-[150px]">
+            <div className="space-y-2 flex-1">
               {categorized.real.map(item => (
                 <EmailCard key={item.id} item={item} onMove={moveItem} currentCategory="real" />
               ))}
@@ -128,11 +157,11 @@ export function Round2Screen() {
           {/* Unsorted Column */}
           <div className="drop-zone drop-zone-neutral">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-lg">📦</span>
-              <h3 className="font-bold text-foreground">UNSORTED</h3>
+              <span className="text-xl">📧</span>
+              <h3 className="font-bold text-foreground text-lg">EMAILS</h3>
               <span className="text-sm text-muted-foreground">({categorized.unsorted.length} items)</span>
             </div>
-            <div className="space-y-2 min-h-[150px]">
+            <div className="space-y-2 flex-1">
               {categorized.unsorted.map(item => (
                 <EmailCard key={item.id} item={item} onMove={moveItem} currentCategory="unsorted" />
               ))}
@@ -142,11 +171,11 @@ export function Round2Screen() {
           {/* Fake Column */}
           <div className="drop-zone drop-zone-danger">
             <div className="flex items-center gap-2 mb-4">
-              <XCircle className="w-5 h-5 text-destructive" />
-              <h3 className="font-bold text-destructive">FAKE</h3>
+              <XCircle className="w-6 h-6 text-destructive" />
+              <h3 className="font-bold text-destructive text-lg">FAKE</h3>
               <span className="text-sm text-muted-foreground">({categorized.fake.length} items)</span>
             </div>
-            <div className="space-y-2 min-h-[150px]">
+            <div className="space-y-2 flex-1">
               {categorized.fake.map(item => (
                 <EmailCard key={item.id} item={item} onMove={moveItem} currentCategory="fake" />
               ))}
@@ -245,8 +274,7 @@ function Round2Results({
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Score */}
-        <div className={`text-center p-8 rounded-2xl mb-8 ${isGreat ? 'bg-success/10 border-2 border-success' : 'bg-warning/10 border-2 border-warning'}`}>
+        <div className={`text-center p-8 rounded-2xl mb-8 ${isGreat ? 'bg-success/10 border-2 border-success' : 'bg-orange-100 border-2 border-orange-400'}`}>
           <div className="text-6xl mb-4">{isGreat ? '🎉' : '💪'}</div>
           <h2 className="text-3xl font-bold text-foreground mb-2">
             {results.correct}/{results.total} Correct!
@@ -254,7 +282,6 @@ function Round2Results({
           <p className="text-lg text-muted-foreground">{percentage}% accuracy</p>
         </div>
 
-        {/* Answers */}
         <div className="space-y-3 mb-8">
           <h3 className="font-bold text-foreground mb-4">Your Answers:</h3>
           {items.map(item => {
@@ -295,10 +322,9 @@ function Round2Results({
           })}
         </div>
 
-        {/* Key Lessons */}
         <div className="bg-card rounded-xl border border-border p-6 mb-8">
           <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-warning" />
+            <AlertTriangle className="w-5 h-5 text-orange-500" />
             Key Lessons:
           </h3>
           <div className="grid md:grid-cols-2 gap-4">
@@ -320,7 +346,6 @@ function Round2Results({
           </div>
         </div>
 
-        {/* Continue */}
         <div className="flex justify-center">
           <Button onClick={onContinue} size="lg" className="font-semibold text-lg px-8">
             Final Mission: Scam Analysis
