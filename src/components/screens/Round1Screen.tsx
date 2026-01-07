@@ -62,27 +62,49 @@ export function Round1Screen() {
 
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Hints Box - Always Visible, Horizontal */}
-        <div className="hints-box mb-6 !p-5">
+        <div className="hints-box mb-6 !py-4 !px-5 !pr-3">
           <h3 className="font-bold text-foreground mb-3 text-lg">🎯 KEY THINGS TO REMEMBER</h3>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {/* Domain Extensions */}
-            <div>
-              <h4 className="font-semibold text-foreground mb-2 text-sm">📍 Domain Extensions</h4>
-              <div className="space-y-0.5 leading-relaxed">
-                {domainExtensions.map(d => (
-                  <div key={d.ext} className="flex gap-2 text-sm">
-                    <span className="font-mono font-semibold text-primary">{d.ext}</span>
-                    <span className="text-muted-foreground">- {d.desc}</span>
-                  </div>
-                ))}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(180px,28%)_1fr] gap-x-4">
+            {/* Left Column: Domain Extensions + Tools */}
+            <div className="space-y-5">
+              {/* Domain Extensions */}
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 text-sm">📍 Domain Extensions</h4>
+                <div className="space-y-0.5 leading-relaxed">
+                  {domainExtensions.map(d => (
+                    <div key={d.ext} className="flex gap-2 text-sm">
+                      <span className="font-mono font-semibold text-primary">{d.ext}</span>
+                      <span className="text-muted-foreground">- {d.desc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tools */}
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 text-sm">🔧 Tools to Verify</h4>
+                <div className="space-y-1.5">
+                  {verificationTools.websites.map(t => (
+                    <a 
+                      key={t.name} 
+                      href={t.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="flex items-center gap-2 text-sm text-info hover:underline"
+                    >
+                      <span className="font-mono">{t.name}</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Red Flags */}
+            {/* Right Column: Red Flags */}
             <div>
               <h4 className="font-semibold text-foreground mb-2 text-sm">🚩 Red Flags to Watch</h4>
-              <div className="space-y-3.5 leading-snug">
+              <div className="space-y-3 leading-snug">
                 {redFlagPatterns.map((f, i) => (
                   <div key={i} className="space-y-0.5">
                     <p className="font-bold text-[15px] text-foreground">{f.title}</p>
@@ -92,25 +114,6 @@ export function Round1Screen() {
                       <span className="text-[#475569]"> — {f.trick}</span>
                     </p>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Tools */}
-            <div>
-              <h4 className="font-semibold text-foreground mb-2 text-sm">🔧 Tools to Verify</h4>
-              <div className="space-y-2">
-                {verificationTools.websites.map(t => (
-                  <a 
-                    key={t.name} 
-                    href={t.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="flex items-center gap-2 text-sm text-info hover:underline"
-                  >
-                    <span className="font-mono">{t.name}</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
                 ))}
               </div>
             </div>
