@@ -62,16 +62,16 @@ export function Round1Screen() {
 
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Hints Box - Always Visible, Horizontal */}
-        <div className="hints-box mb-6">
-          <h3 className="font-bold text-foreground mb-4 text-lg">🎯 KEY THINGS TO REMEMBER</h3>
+        <div className="hints-box mb-6 !p-5">
+          <h3 className="font-bold text-foreground mb-3 text-lg">🎯 KEY THINGS TO REMEMBER</h3>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Domain Extensions */}
             <div>
               <h4 className="font-semibold text-foreground mb-2 text-sm">📍 Domain Extensions</h4>
-              <div className="space-y-1 text-sm">
+              <div className="space-y-0.5 leading-relaxed">
                 {domainExtensions.map(d => (
-                  <div key={d.ext} className="flex gap-2">
+                  <div key={d.ext} className="flex gap-2 text-sm">
                     <span className="font-mono font-semibold text-primary">{d.ext}</span>
                     <span className="text-muted-foreground">- {d.desc}</span>
                   </div>
@@ -82,12 +82,15 @@ export function Round1Screen() {
             {/* Red Flags */}
             <div>
               <h4 className="font-semibold text-foreground mb-2 text-sm">🚩 Red Flags to Watch</h4>
-              <div className="space-y-3 text-sm">
+              <div className="space-y-3.5 leading-snug">
                 {redFlagPatterns.map((f, i) => (
-                  <div key={i}>
-                    <p className="font-bold text-foreground">{f.title}</p>
-                    <p className="text-muted-foreground text-xs italic">Example: <span className="font-mono bg-muted px-1 rounded">{f.example}</span></p>
-                    <p className="text-foreground text-xs mt-0.5">The trick: {f.trick}</p>
+                  <div key={i} className="space-y-0.5">
+                    <p className="font-bold text-[15px] text-foreground">{f.title}</p>
+                    <p className="text-[14px] leading-snug">
+                      <span className="italic text-[#64748b]">Example: </span>
+                      <span className="font-mono bg-muted px-1 rounded text-[13px] italic text-[#64748b]">{f.example}</span>
+                      <span className="text-[#475569]"> — {f.trick}</span>
+                    </p>
                   </div>
                 ))}
               </div>
