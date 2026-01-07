@@ -82,11 +82,12 @@ export function Round1Screen() {
             {/* Red Flags */}
             <div>
               <h4 className="font-semibold text-foreground mb-2 text-sm">🚩 Red Flags to Watch</h4>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-3 text-sm">
                 {redFlagPatterns.map((f, i) => (
                   <div key={i}>
-                    <p className="font-medium text-foreground">{f.title}</p>
-                    <p className="text-muted-foreground text-xs">Example: {f.example}</p>
+                    <p className="font-bold text-foreground">{f.title}</p>
+                    <p className="text-muted-foreground text-xs italic">Example: <span className="font-mono bg-muted px-1 rounded">{f.example}</span></p>
+                    <p className="text-foreground text-xs mt-0.5">The trick: {f.trick}</p>
                   </div>
                 ))}
               </div>
