@@ -254,11 +254,11 @@ export const scamCases: ScamCase[] = [
 
 export const domainExtensions = [
   { ext: '.org', desc: 'Non-profit organizations' },
-  { ext: '.co.in', desc: 'Businesses registered in India' },
-  { ext: '.com', desc: 'International/American companies' },
-  { ext: '.in', desc: 'India-specific websites' },
-  { ext: '.eu', desc: 'Europe specific' },
-  { ext: '.gov.in', desc: 'Government websites in India' },
+  { ext: '.co.in', desc: 'Businesses in India' },
+  { ext: '.com', desc: 'International companies' },
+  { ext: '.in', desc: 'India-specific sites' },
+  { ext: '.eu', desc: 'Europe-specific' },
+  { ext: '.gov.in', desc: 'Government India' },
 ];
 
 export const redFlagPatterns = [
