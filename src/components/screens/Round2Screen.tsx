@@ -69,18 +69,20 @@ export function Round2Screen() {
             {/* Real Company Emails */}
             <div>
               <h4 className="font-semibold text-success mb-2 text-sm">✅ Real Company Emails</h4>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-3 text-sm">
                 <div>
-                  <p className="font-medium text-foreground">Use their own domain</p>
-                  <p className="text-muted-foreground text-xs">Example: customercare@pnb.co.in</p>
+                  <p className="font-bold text-foreground">Use their own domain</p>
+                  <p className="text-muted-foreground text-xs italic">Example: <span className="font-mono bg-muted px-1 rounded">customercare@pnb.co.in</span></p>
+                  <p className="text-foreground text-xs mt-0.5">The part after @ should exactly match the company's official website.</p>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Match their website domain exactly</p>
-                  <p className="text-muted-foreground text-xs">If website is amazon.in, email should be @amazon.in</p>
+                  <p className="font-bold text-foreground">Match their website domain exactly</p>
+                  <p className="text-muted-foreground text-xs italic">Example: If website is <span className="font-mono bg-muted px-1 rounded">amazon.in</span>, email should be <span className="font-mono bg-muted px-1 rounded">@amazon.in</span>, not @amazon-india.com</p>
+                  <p className="text-foreground text-xs mt-0.5">Always verify the company's official website first.</p>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Never use free providers</p>
-                  <p className="text-muted-foreground text-xs">Banks never use Gmail, Hotmail, or Yahoo</p>
+                  <p className="font-bold text-foreground">Never use free providers</p>
+                  <p className="text-foreground text-xs mt-0.5">Banks and reputed companies never use Gmail, Hotmail, or Yahoo for official communication. They always have their own email systems.</p>
                 </div>
               </div>
             </div>
@@ -88,22 +90,26 @@ export function Round2Screen() {
             {/* Fake Email Signs */}
             <div>
               <h4 className="font-semibold text-destructive mb-2 text-sm">❌ Fake Email Signs</h4>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-3 text-sm">
                 <div>
-                  <p className="font-medium text-foreground">Use free email services</p>
-                  <p className="text-muted-foreground text-xs">Example: customercare.pnb@gmail.com</p>
+                  <p className="font-bold text-foreground">Use free email services for official communication</p>
+                  <p className="text-muted-foreground text-xs italic">Example: <span className="font-mono bg-muted px-1 rounded">customercare.pnb@gmail.com</span></p>
+                  <p className="text-foreground text-xs mt-0.5">No legitimate bank emails you from @gmail.com or @yahoo.com</p>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Have extra words/dots in domain</p>
-                  <p className="text-muted-foreground text-xs">Example: support@bank.login.com</p>
+                  <p className="font-bold text-foreground">Have extra words/dots in domain</p>
+                  <p className="text-muted-foreground text-xs italic">Example: <span className="font-mono bg-muted px-1 rounded">support@bank.login.com</span> or <span className="font-mono bg-muted px-1 rounded">care@bank.secure.in</span></p>
+                  <p className="text-foreground text-xs mt-0.5">Real company emails are simple and clean.</p>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Mix different domains together</p>
-                  <p className="text-muted-foreground text-xs">Example: support@sbi.co.in.help.com</p>
+                  <p className="font-bold text-foreground">Mix different domains together</p>
+                  <p className="text-muted-foreground text-xs italic">Example: <span className="font-mono bg-muted px-1 rounded">support@sbi.co.in.help.com</span></p>
+                  <p className="text-foreground text-xs mt-0.5">Real emails don't chain multiple domains.</p>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Numbers replacing letters</p>
-                  <p className="text-muted-foreground text-xs">Example: amaz0n with number 0</p>
+                  <p className="font-bold text-foreground">Numbers replacing letters</p>
+                  <p className="text-muted-foreground text-xs italic">Example: <span className="font-mono bg-muted px-1 rounded">amaz0n</span> or <span className="font-mono bg-muted px-1 rounded">flipkart</span> with numbers</p>
+                  <p className="text-foreground text-xs mt-0.5">Watch for character substitution tricks.</p>
                 </div>
               </div>
             </div>
@@ -112,26 +118,23 @@ export function Round2Screen() {
             <div>
               <h4 className="font-semibold text-foreground mb-2 text-sm">🔧 Tools to Verify</h4>
               <div className="space-y-2">
-                {verificationTools.emails.map(t => (
-                  <a 
-                    key={t.name} 
-                    href={t.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="flex items-center gap-2 text-sm text-info hover:underline"
-                  >
-                    <span className="font-mono">{t.name}</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                ))}
+                <a 
+                  href="https://emailawesome.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="block text-sm"
+                >
+                  <span className="font-mono text-info hover:underline">emailawesome.com</span>
+                  <span className="text-muted-foreground text-xs block">Check email authenticity and sender verification</span>
+                </a>
                 <a 
                   href="https://spotthescam.in" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="flex items-center gap-2 text-sm text-info hover:underline"
+                  className="block text-sm"
                 >
-                  <span className="font-mono">spotthescam.in</span>
-                  <ExternalLink className="w-3 h-3" />
+                  <span className="font-mono text-info hover:underline">spotthescam.in</span>
+                  <span className="text-muted-foreground text-xs block">Verify sender legitimacy and domain reputation</span>
                 </a>
               </div>
             </div>

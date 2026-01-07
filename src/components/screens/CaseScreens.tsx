@@ -203,11 +203,17 @@ export function CaseScreen({ caseId, caseNumber, prevScreen, nextScreen }: CaseS
                         </div>
                         <div className="flex-1">
                           <p className="text-sm text-foreground">{item.text}</p>
-                          {submitted && status === 'missed' && item.explanation && (
-                            <p className="text-xs text-warning mt-1">Missed: {item.explanation}</p>
+                          {submitted && status === 'correct' && item.explanation && (
+                            <p className="text-xs text-success mt-1">✅ Correct! {item.explanation}</p>
                           )}
-                          {submitted && status === 'wrong' && (
-                            <p className="text-xs text-destructive mt-1">This is not a red flag</p>
+                          {submitted && status === 'missed' && item.explanation && (
+                            <p className="text-xs text-warning mt-1">⚠️ Missed: {item.explanation}</p>
+                          )}
+                          {submitted && status === 'wrong' && item.explanation && (
+                            <p className="text-xs text-destructive mt-1">This is not a red flag - {item.explanation}</p>
+                          )}
+                          {submitted && status === 'neutral' && !item.isRedFlag && (
+                            <p className="text-xs text-muted-foreground mt-1">✓ Correctly left unselected</p>
                           )}
                         </div>
                       </div>
